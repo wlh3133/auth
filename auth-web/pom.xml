@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>auth-web</artifactId>
+	<parent>
+		<groupId>cn.king</groupId>
+		<artifactId>auth</artifactId>
+		<version>1.0</version>
+		<relativePath>../auth</relativePath>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>cn.king</groupId>
+			<artifactId>auth-core</artifactId>
+			<version>${auth.version}</version>
+		</dependency>
+		<!-- 浏览器端Session管理的重要依赖 -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
