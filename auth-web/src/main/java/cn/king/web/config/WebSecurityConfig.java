@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import cn.king.web.service.AuthUserDetailsService;
+import cn.king.web.validate.code.CodeFilter;
 
 /**
  * @author wlh by 2018-09-06
@@ -33,7 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-        http.formLogin()
+		CodeFilter codeFilter = new CodeFilter();
+		codeFilter.setAuthFailureHandler(authFailureHandler);
+		
+        http.addFilterBefore(codeFilter, UsernamePasswordAuthenticationFilter.class)
+        	.formLogin()
 		        .loginPage("/auth/require")
 		        .loginProcessingUrl("/auth/form")
 		        .successHandler(authSuccessHandler)

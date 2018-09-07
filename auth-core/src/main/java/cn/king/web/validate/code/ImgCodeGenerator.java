@@ -1,4 +1,4 @@
-package cn.king.web.code;
+package cn.king.web.validate.code;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -18,16 +19,14 @@ import lombok.Data;
  */
 @Data
 public class ImgCodeGenerator implements ICodeGenerator {
-
-    private static final String IMAGE_WIDTH_NAME = "width";
-    private static final String IMAGE_HEIGHT_NAME = "height";
-    
+	
+    @Autowired
     private AuthProperties authProperties;
     
 	@Override
 	public ImgCode generate(ServletWebRequest request) {
-        int width = ServletRequestUtils.getIntParameter(request.getRequest(), IMAGE_WIDTH_NAME, 130);
-        int height = ServletRequestUtils.getIntParameter(request.getRequest(), IMAGE_HEIGHT_NAME, 45);
+        int width = ServletRequestUtils.getIntParameter(request.getRequest(), "width", authProperties.getCode().getWidth());
+        int height = ServletRequestUtils.getIntParameter(request.getRequest(), "height", authProperties.getCode().getHeight());
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics g = image.getGraphics();
         Random random = new Random();
@@ -46,7 +45,7 @@ public class ImgCodeGenerator implements ICodeGenerator {
 
         // 生成数字验证码
         StringBuilder sRand = new StringBuilder();
-        Integer len = 4;
+        int len = authProperties.getCode().getLength();
         for (int i = 0; i < len; i++) {
             String rand = String.valueOf(random.nextInt(10));
             sRand.append(rand);
@@ -56,7 +55,7 @@ public class ImgCodeGenerator implements ICodeGenerator {
 
         g.dispose();
 
-        return new ImgCode(image, sRand.toString(), 7200L);
+        return new ImgCode(image, sRand.toString(), authProperties.getCode().getSeconds());
 	}
 
     /**

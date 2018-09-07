@@ -7,7 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class WebProperties {
+public class WebProperty {
 	
     private String loginPage = "/auth.html";
 

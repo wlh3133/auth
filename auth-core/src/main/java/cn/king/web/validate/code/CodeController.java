@@ -1,4 +1,4 @@
-package cn.king.web.code;
+package cn.king.web.validate.code;
 
 import java.io.IOException;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 
+import cn.king.web.properties.AuthProperties;
 import lombok.Data;
 
 /**
@@ -24,21 +25,21 @@ import lombok.Data;
 public class CodeController {
 
 	public static final String SESSION_KEY = "SESSION_KEY_IMG_CODE";
-	private static final String FORMAT_NAME = "JPEG";	
 	
 	private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 	
 	@Autowired
-	private ICodeGenerator imgCodeGenerator;
+	private ICodeGenerator codeGenerator;
+
 		
 	@GetMapping("/code/img")
 	public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 第一步：根据请求生成一个图形验证码对象
-		ImgCode imgCode = imgCodeGenerator.generate(new ServletWebRequest(request));
+		ImgCode imgCode = codeGenerator.generate(new ServletWebRequest(request));
 		// 第二步：将图形验证码对象存到session中,第一个参数可以从传 入的请求中获取session
 		sessionStrategy.setAttribute(new ServletRequestAttributes(request), SESSION_KEY, imgCode);
 		// 第三步：将生成的图片写到接口的响应中
-		ImageIO.write(imgCode.getImage(), FORMAT_NAME, response.getOutputStream());
+		ImageIO.write(imgCode.getImage(), "JPEG", response.getOutputStream());
 	}
 
 

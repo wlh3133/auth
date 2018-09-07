@@ -1,4 +1,4 @@
-package cn.king.web.code;
+package cn.king.web.validate.code;
 
 import org.springframework.web.context.request.ServletWebRequest;
 

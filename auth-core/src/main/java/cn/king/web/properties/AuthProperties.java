@@ -16,7 +16,9 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "king.auth")
 public class AuthProperties {
 	
-	private WebProperties web = new WebProperties();
+	private WebProperty web = new WebProperty();
+	
+	private CodeProperty code = new CodeProperty();
 
 
 	

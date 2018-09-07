@@ -1,4 +1,4 @@
-package cn.king.web.code;
+package cn.king.web.validate.code;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;

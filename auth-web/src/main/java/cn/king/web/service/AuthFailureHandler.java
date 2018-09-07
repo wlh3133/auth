@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.king.web.utils.JsonMsg;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,15 +29,11 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-    log.info("--- login failed by:{}", exception.getMessage());
+    log.info("--- login failed is: {}", exception.getMessage());
 
-    //这里可以根据实际情况，来确定是跳转到页面或者json格式。
-    //如果是返回json格式
-    Map<String,String> map=new HashMap<>();
-    map.put("code", "201");
-    map.put("msg", "登录失败");
+
     response.setContentType("application/json; charset=UTF-8");
     response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    response.getWriter().write(objectMapper.writeValueAsString(map));
+    response.getWriter().write(objectMapper.writeValueAsString(new JsonMsg(exception.getMessage())));
   }
 }

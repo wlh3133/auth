@@ -1,4 +1,4 @@
-package cn.king.web.code;
+package cn.king.web.validate.code;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,12 +22,19 @@ public class CodeBeanConfig {
 		this.authProperties = authProperties;
 	}
 	
-	@Bean
+/*	@Bean
 	@ConditionalOnMissingBean(name="imgCodeGenerator")
 	public ICodeGenerator imgCodeGenerator() {
 		ImgCodeGenerator imgCodeGenerator = new ImgCodeGenerator();
 		imgCodeGenerator.setAuthProperties(authProperties);
 		return imgCodeGenerator;
-	}
+	}*/
 	
+	@Bean
+	@ConditionalOnMissingBean(name="codeGenerator")
+	public ICodeGenerator codeGenerator() {
+		CodeGenerator codeGenerator = new CodeGenerator();
+		codeGenerator.setProperties(authProperties);
+		return codeGenerator;
+	}
 }
