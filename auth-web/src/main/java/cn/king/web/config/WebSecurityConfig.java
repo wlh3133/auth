@@ -1,51 +1,47 @@
 package cn.king.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import cn.king.auth.core.service.AuthUserDetailsService;
+import cn.king.web.service.AuthUserDetailsService;
 
 /**
  * @author wlh by 2018-09-06
  *
  */
+@Configuration
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthUserDetailsService authUserDetailsService;
-	
-    /**
-     * 配置了这个Bean以后，从前端传递过来的密码将被加密
-     *
-     * @return PasswordEncoder实现类对象
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Autowired
+	AuthenticationSuccessHandler authSuccessHandler;
+	@Autowired
+	AuthenticationFailureHandler authFailureHandler;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(authUserDetailsService)
-			.passwordEncoder(passwordEncoder());
+		auth.userDetailsService(authUserDetailsService);
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-		        .loginPage("/authentication/require")
-		        .loginProcessingUrl("/authentication/form")
-		//        .successHandler(lemonAuthenticationSuccessHandler)
-		//        .failureHandler(lemonAuthenticationFailureHandler)
+		        .loginPage("/auth/require")
+		        .loginProcessingUrl("/auth/form")
+		        .successHandler(authSuccessHandler)
+		        .failureHandler(authFailureHandler)
 		        .permitAll()
 	        	.and()
 	        .authorizeRequests()
-		        .antMatchers("/authentication/require")
+		        .antMatchers("/login.html", "/css/**")
 		        .permitAll()
 		        .anyRequest()
 		        .authenticated()

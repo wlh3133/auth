@@ -1,10 +1,9 @@
-package cn.king.auth.core.controller;
+package cn.king.web.controller;
 
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.html.HTML;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.king.auth.core.properties.AuthProperties;
+import cn.king.web.properties.AuthProperties;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +27,7 @@ public class AuthController {
 	private RequestCache requestCache = new HttpSessionRequestCache();
 	private RedirectStrategy strategy = new DefaultRedirectStrategy();
 	private static final String HTML = ".html";
+	@Autowired
 	private AuthProperties authProperties;
 	
     /**
@@ -44,10 +44,11 @@ public class AuthController {
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
 		if (savedRequest != null) {
 			String redirectUrl = savedRequest.getRedirectUrl();
-			// log.info("--- RedirectUrl is :" + redirectUrl);
+			 log.info("--- RedirectUrl is: {}", redirectUrl);
+
 			// 处理来自html的请求，直接跳到登陆页面
 			if (StringUtils.endsWithIgnoreCase(redirectUrl, HTML)) {
-				strategy.sendRedirect(request, response, authProperties.getWebProperties().getLoginPage());
+				strategy.sendRedirect(request, response, authProperties.getWeb().getLogin());
 			}
 		}
 		// 非html请求则返回一个Json信息

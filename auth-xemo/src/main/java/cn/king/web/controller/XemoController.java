@@ -1,13 +1,8 @@
 package cn.king.web.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import cn.king.auth.core.domain.AuthUser;
-import cn.king.auth.core.domain.AuthUserRepository;
 
 /**
  * @author wlh by 2018-09-06
@@ -16,8 +11,7 @@ import cn.king.auth.core.domain.AuthUserRepository;
 @RestController
 public class XemoController {
 
-	@Autowired
-	private AuthUserRepository authUserRepository;
+
 	
 	@GetMapping("/hello")
 	public String hello() {
@@ -25,9 +19,9 @@ public class XemoController {
 	}
 	
 	
-	@GetMapping("/user")
-	public List<AuthUser> getUses() {
-		return authUserRepository.findAll();
+	@GetMapping("/user/{id}")
+	public String getUses(@PathVariable String id) {
+		return "--- User is " + id;
 	}
 	
 }
