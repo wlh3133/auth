@@ -44,11 +44,13 @@ public class AuthController {
 		SavedRequest savedRequest = requestCache.getRequest(request, response);
 		if (savedRequest != null) {
 			String redirectUrl = savedRequest.getRedirectUrl();
-			 log.info("--- RedirectUrl is: {}", redirectUrl);
+			 log.info("--- Request Url is: \"{}\"", redirectUrl);
 
 			// 处理来自html的请求，直接跳到登陆页面
 			if (StringUtils.endsWithIgnoreCase(redirectUrl, HTML)) {
-				strategy.sendRedirect(request, response, authProperties.getWeb().getLogin());
+				String url = authProperties.getWeb().getLoginPage();
+				log.info("--- Redirect Url is: \"{}\"", url);
+				strategy.sendRedirect(request, response, url);
 			}
 		}
 		// 非html请求则返回一个Json信息

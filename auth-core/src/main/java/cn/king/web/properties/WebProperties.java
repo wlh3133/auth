@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class WebProperties {
 	
-    private String login = "/login.html";
+    private String loginPage = "/auth.html";
 
     private boolean json = true;
 
